@@ -402,7 +402,7 @@ void MainWindow::setupCityCompleter()
         "Tarnów", "Chorzów", "Koszalin", "Kalisz", "Legnica",
         "Grudziądz", "Jaworzno", "Słupsk", "Jastrzębie-Zdrój",
         "Nowy Sącz", "Jelenia Góra", "Siedlce", "Mysłowice",
-        "Piotrków Trybunalski", "Lubin", "Inowrocław", "Gniezno",
+        "Piotrków Trybunalski", "Lubin", "Inowrocław",
         "Zielona Góra", "Zakopane", "Sopot", "Kołobrzeg", "Suwałki",
         "Zamość", "Sanok", "Przemyśl", "Nowy Targ", "Tarnowskie Góry", 
         "Skórzewo", "Gniezno", "Konin" // musiałem dodać xD sorry Kubuś ~mel 
