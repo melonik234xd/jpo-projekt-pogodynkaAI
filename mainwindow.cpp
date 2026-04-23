@@ -431,7 +431,7 @@ void MainWindow::applyTemperatureTheme(double avgTemp)
     QString accentColor;
     if (avgTemp > 20.0) {
         accentColor = "#FF8C42"; // ciepło — pomarańcz
-    } else if (avgTemp < 5.0) {
+    } else if (avgTemp < 0.0) {
         accentColor = "#64B5F6"; // mróz — jasny niebieski
     }
 
@@ -504,6 +504,13 @@ void MainWindow::onGenerateClicked()
     m_currentPm25 = -1.0; // reset AQI przy każdym nowym zapytaniu
     ui->showCodeBtn->setEnabled(false);
 
+    // Wyczyść stary wykres i pokaż komunikat ładowania
+    m_currentChartPixmap = QPixmap();
+    ui->chartLabel->setPixmap(QPixmap());
+    ui->chartLabel->setText(
+        QString("Trwa generowanie wykresu temperatury i opadów dla: %1").arg(city));
+    ui->chartLabel->setAlignment(Qt::AlignCenter);
+
     setGenerating(true);
     appendLog(QString("Start: pobieranie pogody dla \"%1\" (%2 dni)...").arg(city).arg(days));
 
@@ -545,6 +552,10 @@ void MainWindow::onWeatherReady(const QString &csvPath, const QString &cityName)
     }
 
     appendLog(QString("OK: Dane pogodowe zapisane: %1").arg(csvPath));
+
+    // Natychmiastowe wyświetlenie statystyk — bez czekania na AI i Python
+    calculateAndDisplayStats(csvPath, "");
+
     appendLog("Wysyłanie zapytania do Ollama (generowanie skryptu Python)...");
 
     QMetaObject::invokeMethod(m_ollamaClient, "generateScript",
@@ -576,6 +587,16 @@ void MainWindow::onGenerateDayClicked()
     setGenerating(true);
     appendLog(QString("Generowanie szczegółów dla dnia: %1").arg(selectedDate));
 
+    // Natychmiastowe wyświetlenie statystyk dla wybranego dnia
+    calculateAndDisplayStats(m_currentCsvPath, selectedDate);
+
+    // Wyczyść stary wykres i pokaż komunikat ładowania
+    m_currentChartPixmap = QPixmap();
+    ui->chartLabel->setPixmap(QPixmap());
+    ui->chartLabel->setText(
+        QString("Trwa generowanie wykresu temperatury i opadów dla: %1").arg(m_currentCityName));
+    ui->chartLabel->setAlignment(Qt::AlignCenter);
+
     QMetaObject::invokeMethod(m_ollamaClient, "generateScript",
                               Qt::QueuedConnection,
                               Q_ARG(QString, m_currentCsvPath),
@@ -599,6 +620,9 @@ void MainWindow::onScriptGenerated(const QString &pythonCode)
 /**
  * @brief Obsługuje gotowy plik wykresu i odświeża sekcje UI.
  * @param chartPath Ścieżka do obrazu wygenerowanego przez skrypt.
+ *
+ * Statystyki tekstowe są już wyświetlone (przez onWeatherReady lub
+ * onGenerateDayClicked), więc tutaj tylko ładujemy i skalujemy wykres.
  */
 void MainWindow::onChartReady(const QString &chartPath)
 {
@@ -613,7 +637,6 @@ void MainWindow::onChartReady(const QString &chartPath)
     setGenerating(false);
     appendLog("Gotowe.");
 
-    calculateAndDisplayStats(m_currentCsvPath, m_currentTargetDate);
     updateChartDisplay();
 }
 
