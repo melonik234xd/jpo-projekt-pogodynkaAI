@@ -431,7 +431,7 @@ void MainWindow::applyTemperatureTheme(double avgTemp)
     QString accentColor;
     if (avgTemp > 20.0) {
         accentColor = "#FF8C42"; // ciepło — pomarańcz
-    } else if (avgTemp < 0.0) {
+    } else if (avgTemp < 5.0) {
         accentColor = "#64B5F6"; // mróz — jasny niebieski
     }
 
