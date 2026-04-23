@@ -4,9 +4,10 @@ Desktopowa aplikacja w C++/Qt6 do pobierania prognozy pogody i generowania wykre
 
 ## Co robi aplikacja
 
-1. Pobiera dane pogodowe z Open-Meteo dla wybranego miasta.
+1. Pobiera dane pogodowe z Open-Meteo dla wybranego miasta i zapisuje informacje w pliku `weather_data.csv` .
 2. Wysyła prompt do lokalnego modelu (Ollama), aby wygenerować skrypt Python z wykresem.
 3. Uruchamia skrypt i wyświetla gotowy wykres temperatury.
+4. Odpowiada na pytania.
 
 Operacje sieciowe i komunikacja z modelem działają w osobnych wątkach, więc GUI pozostaje responsywne.
 
@@ -29,7 +30,7 @@ pip install -r requirements.txt
 ### 2) Ollama
 
 ```bash
-ollama pull llama3.2
+ollama pull gemma4:e4b
 ollama serve
 ```
 
@@ -104,17 +105,10 @@ jpo-pogodynka/
 `- README.md
 ```
 
-## Do zrobienia / poprawki
+## Autorzy
 
-- [to fix] wyswietlanie dodatkowych info w sekcji nie na pismie i moze wiecej informacji
-- [todo] dodanie mozliwosci zapytania modelu o informacje/rekomendacje pogodowe
-- [to fix] logi pod przycisk nie na srodku menu
-- [to fix] brak setFullWindow() czy jakos tak przy wygenerowaniu wykresu
-- [todo] config file z ustawieniami w apce 
-- [todo] poprawa GUI ???
-- [todo] mozliwosc wybrania wykresu slupkowego dla temperatury
-- [to fix] podział na dzień i noc + informacje o wschodzie i zachodzie słońca 
-
-## Autor
+D. D. 
+J. B.
+M. C.
 
 Projekt edukacyjny (JPO — Jezyki i Programowanie Obiektowe).
