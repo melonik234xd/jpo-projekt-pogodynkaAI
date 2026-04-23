@@ -120,12 +120,12 @@ void OllamaClient::askRecommendation(const QString &question, const QString &wea
     } else {
         csvData = "Brak dodatkowych danych godzinowych.";
     }
-
-    qDebug() << "--- WYSYŁANE DO AI ---";
-    qDebug() << "API:" << weatherSummary;
-    qDebug() << "CSV (skrócone):" << csvData;
-    qDebug() << "Pytanie:" << question;
-    qDebug() << "----------------------";
+    // TO WYSYLA DO KONSOLKI INFO O TYM CO OLLAMA DOSTAJE JAK SZUKALEM JAK TO NAPRAWIC BO SIE OLLAMA BUNTOWALA ~ mel
+    //qDebug() << "--- WYSYŁANE DO AI ---";
+    //qDebug() << "API:" << weatherSummary;
+    //qDebug() << "CSV (skrócone):" << csvData;
+    //qDebug() << "Pytanie:" << question;
+    //qDebug() << "----------------------";
 
     QJsonObject json;
     json["model"]  = m_modelName;
