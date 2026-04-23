@@ -15,6 +15,9 @@
 #include <QNetworkRequest>
 #include <QRegularExpression>
 #include <QUrl>
+#include <QFile>
+#include <QTextStream>
+#include <QCoreApplication>
 
 /**
  * @brief Tworzy klienta komunikacji z lokalnym serwerem Ollama.
@@ -52,29 +55,100 @@ void OllamaClient::generateScript(const QString &csvPath, const QString &cityNam
 }
 
 /**
- * @brief Wysyła zapytanie do Ollama z włączonym streamingiem.
+ * @brief Wysyła zapytanie do lokalnego modelu Ollama, wzbogacając kontekst o dane z API oraz pliku CSV.
  *
- * Ollama przy stream:true wysyła odpowiedź jako serię linii JSON, każda w formacie:
+ * Funkcja przygotowuje kompleksowy prompt dla modelu językowego, realizując następujące kroki:
+ * 1. Odczytuje i filtruje plik "weather_data.csv" z katalogu aplikacji (pobierając dane co 3 godziny, aby uniknąć przeładowania kontekstu AI).
+ * 2. Tłumaczy surowe wartości opadów na logiczne podpowiedzi tekstowe ("TAK/NIE"), co ułatwia mniejszym modelom bezbłędną interpretację.
+ * 3. Rozdziela instrukcje na `system` (twarde zasady zachowania, wymuszenie czystego tekstu) oraz główny `prompt` (zawierający dane z API, skrócone dane CSV i właściwe pytanie użytkownika).
+ *
+ * Zapytanie wysyłane jest z włączonym streamingiem (stream: true). Odpowiedź wraca jako seria linii JSON w formacie:
  * @code
  * {"model":"...","response":"fragment tekstu","done":false}
  * {"model":"...","response":"","done":true}
  * @endcode
  *
- * Połączenie readyRead pozwala przetwarzać każdy fragment na bieżąco
- * zamiast czekać na finished (co eliminuje długą pauzę przed wyświetleniem).
+ * Zastosowanie sygnału readyRead pozwala przetwarzać fragmenty na bieżąco
+ * zamiast czekać na finished, co eliminuje długą pauzę przed wyświetleniem tekstu w interfejsie.
  *
- * @param question      Pytanie użytkownika.
- * @param weatherSummary Skrócone dane pogodowe dla kontekstu modelu.
+ * @param question       Pytanie zadane przez użytkownika dotyczące prognozy.
+ * @param weatherSummary Skrócone, bieżące dane pogodowe pobrane z głównego API, służące jako podstawa kontekstu.
  */
+
+// TAK BYLY Z TYM PROBLEMY
+
 void OllamaClient::askRecommendation(const QString &question, const QString &weatherSummary)
 {
+    QString csvData = "Szczegółowa prognoza godzinowa:\n";
+    QString filePath = QCoreApplication::applicationDirPath() + "/weather_data.csv";
+    QFile file(filePath);
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+
+        // Pomijamy pierwszą linijkę (nagłówki: datetime,temperature,precipitation...)
+        if (!in.atEnd()) {
+            in.readLine();
+        }
+
+        int lineCounter = 0;
+        // Czytamy plik linijka po linijce i formatujemy
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList parts = line.split(',');
+
+            // Upewniamy się, że linijka ma wszystkie 6 kolumn
+            if (parts.size() >= 6) {
+                // Pobieramy tylko co 3-cią linię, żeby odciążyć kontekst modelu
+                if (lineCounter % 3 == 0) {
+                    QString datetime = parts[0];
+                    datetime.replace("T", " o "); // Zmienia "2026-04-23T15:00" na "2026-04-23 o 15:00"
+
+                    QString temp = parts[1];
+                    QString opadyRaw = parts[2];
+                    QString wiatr = parts[4];
+                    // AI JEST TAKIE GŁUPIE
+                    QString czyBedziePadac = (opadyRaw.toFloat() > 0.0f) ? QString("TAK (%1 mm)").arg(opadyRaw) : "NIE";
+
+                    csvData += QString("- %1 -> Temp: %2°C, Będzie padać: %3, Wiatr: %4 km/h\n")
+                                   .arg(datetime, temp, czyBedziePadac, wiatr);
+                }
+                lineCounter++;
+            }
+        }
+        file.close();
+    } else {
+        csvData = "Brak dodatkowych danych godzinowych.";
+    }
+
+    qDebug() << "--- WYSYŁANE DO AI ---";
+    qDebug() << "API:" << weatherSummary;
+    qDebug() << "CSV (skrócone):" << csvData;
+    qDebug() << "Pytanie:" << question;
+    qDebug() << "----------------------";
+
     QJsonObject json;
     json["model"]  = m_modelName;
     json["stream"] = true;
-    json["system"] = QString("Jesteś polskim asystentem pogodowym. Bądź zwięzły i pomocny. "
-                             "NIE używaj formatowania Markdown (żadnych gwiazdek, pogrubień ani list). "
-                             "Używaj wyłącznie czystego tekstu. Aktualne dane pogodowe to: %1").arg(weatherSummary);
-    json["prompt"] = question;
+
+    // 1. SYSTEM PROMPT - Tylko twarde zasady zachowania
+    QString systemPrompt = "Jesteś polskim asystentem pogodowym. "
+                           "MASZ CAŁKOWITY ZAKAZ używania formatowania Markdown (żadnych gwiazdek, pogrubień, list). "
+                           "Odpowiadaj wyłącznie czystym tekstem. "
+                           "Nie proś o podanie miasta ani daty. Odpowiadaj krótko i na temat. "
+                           "UWAGA: Użytkownik może pytać o datę w formacie DD.MM (np. 23.04), co odpowiada danym w formacie YYYY-MM-DD (np. 2026-04-23).";
+
+    // 2. USER PROMPT - Dostarczenie "teczki z danymi" i właściwego pytania
+    QString fullPrompt = QString(
+                             "Odpowiedz na pytanie użytkownika na podstawie poniższych danych. "
+                             "Jeśli w danych nie ma odpowiedzi, napisz po prostu: 'Brak danych dla tego terminu'.\n\n"
+                             "[DANE Z API]:\n%1\n\n"
+                             "[DANE Z CSV]:\n%2\n\n"
+                             "Pytanie użytkownika: %3"
+                             ).arg(weatherSummary).arg(csvData).arg(question);
+
+    json["system"] = systemPrompt;
+    json["prompt"] = fullPrompt;
 
     QJsonDocument doc(json);
     QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
