@@ -86,17 +86,13 @@ ctest --test-dir build --output-on-failure
 
 ## Zadawaj pytania !
 
-![Główne okno aplikacji z pogodą](assets/photoreadme.png)
+![Główne okno aplikacji z pogodą](assets/photoreadme2.png)
 
 ## Struktura projektu
 
 ```text
 jpo-pogodynka/
 |- assets/
-|  |- Doxyfile
-|  |- README.md
-|  |- README.txt
-|  |- requirements.txt
 |  |- maindev.png
 |  |- seccdev.png
 |  |- thirdev.png     
@@ -117,16 +113,19 @@ jpo-pogodynka/
 |  |- test_weatherparser.cpp
 |  |- test_ollamaclient.cpp
 |  |- test_scriptrunner.cpp
-`- 
+|- Doxyfile
+|- requirements.txt
+|- README.txt
+`- Doxyfile
 ```
 
 ## Autorzy
 
 D. D. </br>
-![Główne okno aplikacji](assets/mel.png)
+![Główne okno aplikacji](assets/mel.png)</br>
 J. B. </br>
-![Główne okno aplikacji](assets/bronek.png)
+![Główne okno aplikacji](assets/bronek.png)</br>
 M. C. </br>
-![Główne okno aplikacji](assets/rak.png)
+![Główne okno aplikacji](assets/rak.png)</br>
 
 Projekt edukacyjny (JPO — Jezyki i Programowanie Obiektowe).
