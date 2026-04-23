@@ -121,11 +121,9 @@ jpo-pogodynka/
 
 ## Autorzy
 
-D. D. </br>
-![Główne okno aplikacji](assets/mel.png)</br>
-J. B. </br>
-![Główne okno aplikacji](assets/bronek.png)</br>
-M. C. </br>
-![Główne okno aplikacji](assets/rak.png)</br>
+| <img src="assets/mel.png" width="150" height="150"> | <img src="assets/bronek.png" width="150" height="150"> | <img src="assets/rak.png" width="150" height="150"> |
+| :---: | :---: | :---: |
+| **D. D.** | **J. B.** | **M. C.** |
 
+<br>
 Projekt edukacyjny (JPO — Jezyki i Programowanie Obiektowe).
