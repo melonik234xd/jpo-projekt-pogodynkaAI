@@ -1,0 +1,40 @@
+# Doxyfile 1.9.0 — Konfiguracja Doxygen dla projektu Pogodynka AI
+
+# Ogólne
+PROJECT_NAME           = "Pogodynka AI"
+PROJECT_NUMBER         = 1.0
+PROJECT_BRIEF          = "Aplikacja pogodowa z lokalnym modelem AI (Ollama)"
+OUTPUT_DIRECTORY       = docs
+OUTPUT_LANGUAGE        = Polish
+
+# Wejście
+INPUT                  = . tests
+FILE_PATTERNS          = *.cpp *.h
+RECURSIVE              = YES
+EXCLUDE                = build
+
+# Parsowanie
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+# Generowanie
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+HTML_OUTPUT            = html
+
+# Wykresy i diagramy
+HAVE_DOT               = NO
+CLASS_DIAGRAMS         = YES
+
+# Kodowanie
+INPUT_ENCODING         = UTF-8
+DOXYFILE_ENCODING      = UTF-8
+
+# Ostrzeżenia
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+
+# Optymalizacja dla C++
+OPTIMIZE_OUTPUT_FOR_C  = NO
+BUILTIN_STL_SUPPORT    = YES
