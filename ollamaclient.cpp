@@ -251,7 +251,7 @@ QByteArray OllamaClient::buildRequestJson(const QString &csvPath, const QString 
             "Output ONLY the Python code, nothing else.")
             .arg(csvPath)
             .arg(cityName)
-            .arg(chartType.contains("Słupkowy") ? "bar" : "line");
+            .arg("line"); // chartType.contains("Słupkowy") ? "bar" : "line" TO JEST ARCHIWALNE DLATEGO ZMIANA 
     } else {
         prompt = QString(
             "Write a short Python script. It must:\n"
@@ -273,7 +273,7 @@ QByteArray OllamaClient::buildRequestJson(const QString &csvPath, const QString 
             .arg(csvPath)
             .arg(targetDate)
             .arg(cityName)
-            .arg(chartType.contains("Słupkowy") ? "bar" : "line");
+            .arg("line"); // chartType.contains("Słupkowy") ? "bar" : "line" SAME THING
     }
 
     json["prompt"] = prompt;
