@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>1020</width>
-        <height>960</height>
+    <height>960</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>980</width>
-        <height>900</height>
+    <height>900</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -21,6 +21,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="mainLayout">
+    <property name="spacing">
+     <number>12</number>
+    </property>
     <property name="leftMargin">
      <number>16</number>
     </property>
@@ -32,9 +35,6 @@
     </property>
     <property name="bottomMargin">
      <number>16</number>
-    </property>
-    <property name="spacing">
-     <number>12</number>
     </property>
     <item>
      <widget class="QGroupBox" name="controlGroup">
@@ -62,20 +62,19 @@
          </property>
         </widget>
        </item>
-       <!-- NOWE: przycisk geolokalizacji -->
        <item>
         <widget class="QPushButton" name="locateBtn">
-         <property name="text">
-          <string>📍</string>
-         </property>
-         <property name="toolTip">
-          <string>Automatycznie wykryj miasto na podstawie adresu IP</string>
-         </property>
          <property name="maximumSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Automatycznie wykryj miasto na podstawie adresu IP</string>
+         </property>
+         <property name="text">
+          <string>📍</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -85,10 +84,10 @@
        <item>
         <spacer name="spacer1">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -121,10 +120,10 @@
        <item>
         <spacer name="spacer2">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -150,10 +149,10 @@
        <item>
         <spacer name="spacer3">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -195,7 +194,7 @@
        <item>
         <spacer name="controlSpacer">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -205,38 +204,38 @@
          </property>
         </spacer>
        </item>
-        <item>
-         <widget class="QPushButton" name="saveChartBtn">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>36</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Zapisz wykres</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="showCodeBtn">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>36</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>{ } Kod wykresu</string>
-          </property>
-         </widget>
-        </item>
+       <item>
+        <widget class="QPushButton" name="saveChartBtn">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Zapisz wykres</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="showCodeBtn">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>{ } Kod wykresu</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -247,7 +246,6 @@
       </property>
       <layout class="QVBoxLayout" name="statsLayout">
        <item>
-        <!-- minimumHeight zwiększony z 74 na 90, żeby pomieścić linię AQI -->
         <widget class="QLabel" name="statsLabel">
          <property name="minimumSize">
           <size>
@@ -261,14 +259,14 @@
            <bold>true</bold>
           </font>
          </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
          <property name="text">
           <string/>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -277,14 +275,14 @@
     </item>
     <item>
      <widget class="QGroupBox" name="chartGroup">
-      <property name="title">
-       <string>Wykres prognozy</string>
-      </property>
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>1</verstretch>
        </sizepolicy>
+      </property>
+      <property name="title">
+       <string>Wykres prognozy</string>
       </property>
       <layout class="QVBoxLayout" name="chartLayout">
        <item>
@@ -292,13 +290,21 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>420</height>
+           <height>250</height>
           </size>
          </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
          <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>958</width>
+            <height>248</height>
+           </rect>
+          </property>
           <layout class="QVBoxLayout" name="scrollLayout">
            <property name="leftMargin">
             <number>0</number>
@@ -315,10 +321,10 @@
            <item>
             <widget class="QLabel" name="chartLabel">
              <property name="text">
-              <string>Kliknij "Generuj wykres", aby rozpocząć.</string>
+              <string>Kliknij &quot;Generuj wykres&quot;, aby rozpocząć.</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignmentFlag::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -331,26 +337,26 @@
     </item>
     <item>
      <widget class="QGroupBox" name="chatGroup">
-      <property name="title">
-       <string>Porady Pogodowe (Chat Ollama)</string>
-      </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>170</height>
+        <height>300</height>
        </size>
+      </property>
+      <property name="title">
+       <string>Porady Pogodowe (Chat Ollama)</string>
       </property>
       <layout class="QVBoxLayout" name="chatLayout">
        <item>
         <widget class="QTextEdit" name="chatHistory">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
            <height>80</height>
           </size>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -383,7 +389,7 @@
      <x>0</x>
      <y>0</y>
      <width>1020</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
